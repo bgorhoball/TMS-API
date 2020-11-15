@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -24,6 +25,8 @@ class ApiAuthController extends Controller
         $request['password'] = Hash::make($request['password']);
         $request['remember_token'] = Str::random(10);
         $user = User::create($request->toArray());
+        $roles = Role::where('name', 'regular-user')->get();
+        $user->roles()->attach($roles);
         $token = $user->createToken('Password Grant Client')->accessToken;
         $response = [
             'message' => 'successfully registered',
