@@ -48,4 +48,8 @@ class Adapter extends AbstractAdapter
         $this->filterWithScopes($query, $filters);
     }
 
+    protected function works()
+    {
+        return $this->hasMany();
+    }
 }

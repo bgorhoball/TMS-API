@@ -58,13 +58,22 @@ class Validators extends AbstractValidators
      */
     protected function rules($record, array $data): array
     {
-        return [
-            Model::FIELD_DETAILS   => 'required|string',
-            Model::FIELD_DATE      => ['required', new DateTimeIso8601()],
-            Model::FIELD_HOURS     => 'nullable|integer',
-            Model::FIELD_EST_HOURS => 'required|integer',
-            Model::REL_USER        => ['required', new HasOne(User::TABLE_NAME)],
+        $id_user = User::FIELD_ID;
+        $is_admin = request()->user()->roles->contains('name', 'admin');
+        $validator = [
+            Model::FIELD_DETAILS    => 'required|string',
+            Model::FIELD_DATE       => ['required', new DateTimeIso8601()],
+            Model::FIELD_HOURS      => 'nullable|integer',
+            'est-hours'             => 'required|integer',
+            Model::REL_USER         => ['required', new HasOne(User::TABLE_NAME)],
         ];
+
+        // if not admin, can only create works for himself
+        if (!$is_admin) {
+            $validator[Model::REL_USER . '.id'] = 'required|in:' . request()->user()->$id_user;
+        }
+
+        return $validator;
     }
 
     /**
@@ -78,5 +87,4 @@ class Validators extends AbstractValidators
             //
         ];
     }
-
 }

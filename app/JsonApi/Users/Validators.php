@@ -68,10 +68,11 @@ class Validators extends AbstractValidators
         $id = Model::FIELD_ID;
         $table = Model::TABLE_NAME;
         $uniqueExceptString = $record ? ",{$record->$id},{$id}" : '';
+        $is_admin = request()->user()->roles->contains('name', 'admin');
 
         $rules = [
             Model::FIELD_NAME     => 'required|string',
-            Model::FIELD_EMAIL    => 'required|email|unique:' . $table . ',' . Model::FIELD_NAME . $uniqueExceptString,
+            Model::FIELD_EMAIL    => 'required|email|unique:' . $table . ',' . Model::FIELD_EMAIL . $uniqueExceptString,
             Model::FIELD_PASSWORD => [$record ? 'filled' : 'required', 'string'],
             Model::REL_WORKS      => [new HasMany(Work::TABLE_NAME)],
         ];

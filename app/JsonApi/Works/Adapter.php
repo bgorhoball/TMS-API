@@ -54,5 +54,4 @@ class Adapter extends AbstractAdapter
     {
         return $this->belongsTo();
     }
-
 }
