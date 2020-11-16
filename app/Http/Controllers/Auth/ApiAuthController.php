@@ -25,12 +25,14 @@ class ApiAuthController extends Controller
         $request['password'] = Hash::make($request['password']);
         $request['remember_token'] = Str::random(10);
         $user = User::create($request->toArray());
+        $id = User::FIELD_ID;
         $roles = Role::where('name', 'regular-user')->get();
         $user->roles()->attach($roles);
         $token = $user->createToken('Password Grant Client')->accessToken;
         $response = [
             'message' => 'successfully registered',
-            'token'   => $token
+            'token'   => $token,
+            'user'    => $user->$id,
         ];
         return response($response, 200);
     }
@@ -45,12 +47,14 @@ class ApiAuthController extends Controller
             return response(['errors' => $validator->errors()->all()], 422);
         }
         $user = User::where('email', $request->email)->first();
+        $id = User::FIELD_ID;
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('Password Grant Client')->accessToken;
                 $response = [
                     'message' => 'successfully logged in',
-                    'token'   => $token
+                    'token'   => $token,
+                    'user'    => $user->$id,
                 ];
                 return response($response, 200);
             } else {
