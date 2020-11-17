@@ -16,8 +16,8 @@ class CreateRolesUsersTable extends Migration
         Schema::create('roles_users', function (Blueprint $table) {
             $table->unsignedBigInteger(\App\Models\Role::FIELD_ID);
             $table->unsignedBigInteger(\App\Models\User::FIELD_ID);
-            $table->foreign(\App\Models\Role::FIELD_ID)->references(\App\Models\Role::FIELD_ID)->on(\App\Models\Role::TABLE_NAME);
-            $table->foreign(\App\Models\User::FIELD_ID)->references(\App\Models\User::FIELD_ID)->on(\App\Models\User::TABLE_NAME);
+            $table->foreign(\App\Models\Role::FIELD_ID)->references(\App\Models\Role::FIELD_ID)->on(\App\Models\Role::TABLE_NAME)->onDelete('cascade');
+            $table->foreign(\App\Models\User::FIELD_ID)->references(\App\Models\User::FIELD_ID)->on(\App\Models\User::TABLE_NAME)->onDelete('cascade');
         });
     }
 

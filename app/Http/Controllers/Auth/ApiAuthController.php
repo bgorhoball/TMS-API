@@ -48,6 +48,7 @@ class ApiAuthController extends Controller
         }
         $user = User::where('email', $request->email)->first();
         $id = User::FIELD_ID;
+        $roles = $user->roles()->get()->pluck(Role::FIELD_NAME);
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('Password Grant Client')->accessToken;
@@ -55,6 +56,7 @@ class ApiAuthController extends Controller
                     'message' => 'successfully logged in',
                     'token'   => $token,
                     'user'    => $user->$id,
+                    'roles'   => $roles
                 ];
                 return response($response, 200);
             } else {

@@ -18,7 +18,7 @@ class Validators extends AbstractValidators
      *      the allowed paths, an empty array for none allowed, or null to allow all paths.
      */
     protected $allowedIncludePaths = [
-        Model::REL_WORKS
+        Model::REL_WORKS,
     ];
 
     /**
@@ -47,7 +47,7 @@ class Validators extends AbstractValidators
     {
         $validator = parent::update($record, $document);
 
-        $validator->sometimes('password-confirmation', 'required_with:' . Model::FIELD_PASSWORD . '|same:' . Model::FIELD_PASSWORD, function ($input) {
+        $validator->sometimes('password_confirmation', 'required_with:' . Model::FIELD_PASSWORD . '|same:' . Model::FIELD_PASSWORD, function ($input) {
             return isset($input['password']);
         });
 
@@ -78,7 +78,7 @@ class Validators extends AbstractValidators
         ];
 
         if (!$record) {
-            $rules['password-confirmation'] = 'required_with:' . Model::FIELD_PASSWORD . '|same:' . Model::FIELD_PASSWORD;
+            $rules['password_confirmation'] = 'required_with:' . Model::FIELD_PASSWORD . '|same:' . Model::FIELD_PASSWORD;
         }
 
         return $rules;
